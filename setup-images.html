@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Настройка изображений для приглашения</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #F5EFEB;
+    color: #2F4156;
+  }
+  h1 { color: #2F4156; margin-top: 0; }
+  .category {
+    background: white;
+    border: 1px solid #C8D9E6;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  .category h2 {
+    margin-top: 0;
+    color: #567C8D;
+    font-size: 18px;
+  }
+  .file-input-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+    margin: 15px 0;
+  }
+  .file-upload {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  input[type="file"] {
+    display: none;
+  }
+  label {
+    display: block;
+    padding: 10px;
+    background: #C8D9E6;
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    transition: background 0.2s;
+  }
+  label:hover {
+    background: #567C8D;
+    color: white;
+  }
+  .preview {
+    width: 100%;
+    height: 80px;
+    background: #f0f0f0;
+    border-radius: 4px;
+    object-fit: cover;
+    display: none;
+  }
+  .preview.show { display: block; }
+  button {
+    background: #2F4156;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 20px;
+  }
+  button:hover { background: #567C8D; }
+  .copy-code {
+    background: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    margin: 15px 0;
+    font-family: monospace;
+    font-size: 12px;
+    max-height: 200px;
+    overflow-y: auto;
+    word-break: break-all;
+  }
+  .info {
+    background: #E8F4F8;
+    border-left: 4px solid #567C8D;
+    padding: 12px;
+    border-radius: 4px;
+    margin: 15px 0;
+    font-size: 14px;
+  }
+</style>
+</head>
+<body>
+
+<h1>📸 Настройка изображений</h1>
+
+<div class="info">
+  <strong>💡 Как использовать:</strong> Загрузите фото для каждой категории. После загрузки нажмите кнопку "Сгенерировать код" — скопируйте полученный HTML и замените им соответствующие части в <code>index.html</code>.
+</div>
+
+<form id="imageForm">
+
+  <!-- МЕН -->
+  <div class="category">
+    <h2>👨 Образцы для мужчин</h2>
+    <p>Загрузите 5-10 фото образцов для мужчин (рекомендуемый размер: 480×640px)</p>
+    <div class="file-input-wrapper" id="menGrid"></div>
+  </div>
+
+  <!-- ЖЕНЩИНЫ -->
+  <div class="category">
+    <h2>👩 Образцы для женщин</h2>
+    <p>Загрузите 5-10 фото образцов для женщин</p>
+    <div class="file-input-wrapper" id="womenGrid"></div>
+  </div>
+
+  <!-- ПАРЫ -->
+  <div class="category">
+    <h2>👫 Образцы для пар</h2>
+    <p>Загрузите 5-10 фото пар в праздничных нарядах</p>
+    <div class="file-input-wrapper" id="coupleGrid"></div>
+  </div>
+
+  <!-- ДЕТИ -->
+  <div class="category">
+    <h2>👶 Образцы для детей</h2>
+    <p>Загрузите 5-10 фото детей в нарядах</p>
+    <div class="file-input-wrapper" id="kidsGrid"></div>
+  </div>
+
+  <button type="submit">✨ Сгенерировать HTML-код</button>
+</form>
+
+<div id="output" style="display:none;">
+  <h2>📋 Сгенерированный код</h2>
+  <p>Скопируйте код ниже и замените им соответствующие секции в index.html</p>
+
+  <h3>Мужчины (для секции "Для мужчин")</h3>
+  <div class="copy-code" id="menCode"></div>
+
+  <h3>Женщины (для секции "Для женщин")</h3>
+  <div class="copy-code" id="womenCode"></div>
+
+  <h3>Пары (для секции "Для пар")</h3>
+  <div class="copy-code" id="coupleCode"></div>
+
+  <h3>Дети (для секции "Для детей")</h3>
+  <div class="copy-code" id="kidsCode"></div>
+</div>
+
+<script>
+  const categories = ['men', 'women', 'couple', 'kids'];
+  const categoryData = {
+    men: { count: 5, grid: 'menGrid', label: 'Мужчина' },
+    women: { count: 5, grid: 'womenGrid', label: 'Женщина' },
+    couple: { count: 5, grid: 'coupleGrid', label: 'Пара' },
+    kids: { count: 5, grid: 'kidsGrid', label: 'Дети' }
+  };
+
+  // Создание инпутов для загрузки
+  Object.entries(categoryData).forEach(([key, data]) => {
+    const grid = document.getElementById(data.grid);
+    for (let i = 1; i <= data.count; i++) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'file-upload';
+      wrapper.innerHTML = `
+        <input type="file" id="${key}_${i}" accept="image/*" data-category="${key}" data-index="${i}">
+        <label for="${key}_${i}">+</label>
+        <img class="preview" id="${key}_${i}_preview">
+      `;
+      grid.appendChild(wrapper);
+
+      document.getElementById(`${key}_${i}`).addEventListener('change', (e) => {
+        if (e.target.files.length) {
+          const reader = new FileReader();
+          reader.onload = (ev) => {
+            const preview = document.getElementById(`${key}_${i}_preview`);
+            preview.src = ev.target.result;
+            preview.classList.add('show');
+          };
+          reader.readAsDataURL(e.target.files[0]);
+        }
+      });
+    }
+  });
+
+  // Генерация кода
+  document.getElementById('imageForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const generated = {};
+    Object.entries(categoryData).forEach(([key, data]) => {
+      let html = '<div class="carousel-track flex transition-transform duration-500 ease-out" style="transform: translateX(0);">\n';
+      for (let i = 1; i <= data.count; i++) {
+        const input = document.getElementById(`${key}_${i}`);
+        if (input.files.length) {
+          const url = URL.createObjectURL(input.files[0]);
+          const fileName = input.files[0].name;
+          html += `          <img src="assets/images/${key}/${fileName}" alt="Образец ${data.label} ${i}" class="carousel-slide w-full sm:w-1/3 flex-shrink-0 aspect-[3/4] object-cover">\n`;
+        }
+      }
+      html += '        </div>';
+      generated[key] = html;
+    });
+
+    document.getElementById('menCode').textContent = generated.men;
+    document.getElementById('womenCode').textContent = generated.women;
+    document.getElementById('coupleCode').textContent = generated.couple;
+    document.getElementById('kidsCode').textContent = generated.kids;
+    document.getElementById('output').style.display = 'block';
+
+    alert('✅ Код сгенерирован! Не забудьте скопировать его и загрузить фото в папку assets/images/');
+  });
+</script>
+
+</body>
+</html>

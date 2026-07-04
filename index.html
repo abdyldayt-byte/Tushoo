@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Leon & Marcel — Первый День Рождения</title>
+<meta name="description" content="Приглашение на первый День рождения и тушоо той Leon &amp; Marcel — 27 июля 2026">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          navy: '#2F4156',
+          teal: '#567C8D',
+          sky: '#C8D9E6',
+          beige: '#F5EFEB',
+        },
+        fontFamily: {
+          serif: ['"Playfair Display"', 'serif'],
+          display: ['"Cormorant Garamond"', 'serif'],
+          sans: ['"Montserrat"', 'sans-serif'],
+        },
+        borderRadius: {
+          arch: '999px 999px 24px 24px',
+        }
+      }
+    }
+  }
+</script>
+
+<style>
+  html { scroll-behavior: smooth; }
+  body {
+    background-color: #F5EFEB;
+    font-family: 'Montserrat', sans-serif;
+    color: #2F4156;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Tartan / plaid pattern used as subtle texture */
+  .tartan-bg {
+    background-color: #F5EFEB;
+    background-image:
+      repeating-linear-gradient(0deg, rgba(47,65,86,0.05) 0px, rgba(47,65,86,0.05) 2px, transparent 2px, transparent 40px),
+      repeating-linear-gradient(90deg, rgba(47,65,86,0.05) 0px, rgba(47,65,86,0.05) 2px, transparent 2px, transparent 40px),
+      repeating-linear-gradient(0deg, rgba(86,124,141,0.06) 0px, rgba(86,124,141,0.06) 6px, transparent 6px, transparent 80px),
+      repeating-linear-gradient(90deg, rgba(86,124,141,0.06) 0px, rgba(86,124,141,0.06) 6px, transparent 6px, transparent 80px);
+  }
+
+  .tartan-dark {
+    background-color: #2F4156;
+    background-image:
+      repeating-linear-gradient(0deg, rgba(200,217,230,0.08) 0px, rgba(200,217,230,0.08) 2px, transparent 2px, transparent 40px),
+      repeating-linear-gradient(90deg, rgba(200,217,230,0.08) 0px, rgba(200,217,230,0.08) 2px, transparent 2px, transparent 40px),
+      repeating-linear-gradient(0deg, rgba(86,124,141,0.25) 0px, rgba(86,124,141,0.25) 6px, transparent 6px, transparent 80px),
+      repeating-linear-gradient(90deg, rgba(86,124,141,0.25) 0px, rgba(86,124,141,0.25) 6px, transparent 6px, transparent 80px);
+  }
+
+  /* Arch shape inspired by the photo-zone backdrop */
+  .arch {
+    border-radius: 50% 50% 0 0 / 60% 60% 0 0;
+    overflow: hidden;
+  }
+  .arch-frame {
+    border-radius: 50% 50% 8px 8px / 38% 38% 8px 8px;
+    overflow: hidden;
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.22s; }
+  .reveal-delay-3 { transition-delay: 0.34s; }
+  .reveal-delay-4 { transition-delay: 0.46s; }
+
+  /* Hero entrance animation — plays once on page load, independent of scroll */
+  @keyframes heroPopIn {
+    0% { opacity: 0; transform: translateY(26px) scale(0.96); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .hero-anim {
+    opacity: 0;
+    animation: heroPopIn 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-play-state: paused;
+  }
+  body.is-opened .hero-anim { animation-play-state: running; }
+  .hero-anim-1 { animation-delay: 0.1s; }
+  .hero-anim-2 { animation-delay: 0.3s; }
+  .hero-anim-3 { animation-delay: 0.5s; }
+  .hero-anim-4 { animation-delay: 0.75s; }
+  .hero-anim-5 { animation-delay: 0.95s; }
+  .hero-anim-6 { animation-delay: 1.15s; }
+  .hero-anim-7 { animation-delay: 1.35s; }
+
+  /* Interactive intro / opening screen */
+  body.intro-active { overflow: hidden; height: 100vh; }
+  .intro-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s;
+  }
+  .intro-overlay.is-closing {
+    opacity: 0;
+    pointer-events: none;
+  }
+  @keyframes introRise {
+    0% { opacity: 0; transform: translateY(18px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  .intro-anim {
+    opacity: 0;
+    animation: introRise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .intro-anim-1 { animation-delay: 0.15s; }
+  .intro-anim-2 { animation-delay: 0.35s; }
+  .intro-anim-3 { animation-delay: 0.55s; }
+  .btn-beige {
+    background-color: #F5EFEB;
+    color: #2F4156;
+    transition: background-color 0.35s ease, transform 0.25s ease, box-shadow .35s ease;
+  }
+  .btn-beige:hover {
+    background-color: #C8D9E6;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px -8px rgba(0,0,0,0.35);
+  }
+
+  .divider-line {
+    height: 1px;
+    width: 64px;
+    background: #567C8D;
+  }
+
+  .btn-navy {
+    background-color: #2F4156;
+    color: #F5EFEB;
+    transition: background-color 0.35s ease, transform 0.25s ease, box-shadow .35s ease;
+  }
+  .btn-navy:hover {
+    background-color: #567C8D;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px -8px rgba(47,65,86,0.45);
+  }
+
+  .btn-outline-navy {
+    background-color: transparent;
+    color: #2F4156;
+    border: 1px solid #2F4156;
+    transition: background-color 0.35s ease, color .35s ease, transform 0.25s ease;
+  }
+  .btn-outline-navy:hover {
+    background-color: #2F4156;
+    color: #F5EFEB;
+    transform: translateY(-2px);
+  }
+
+  .rsvp-btn-yes {
+    background-color: #2F4156;
+    color: #F5EFEB;
+  }
+  .rsvp-btn-yes.active {
+    background-color: #567C8D;
+    box-shadow: 0 10px 20px -8px rgba(47,65,86,0.5);
+  }
+  .rsvp-btn-no {
+    background-color: transparent;
+    color: #2F4156;
+    border: 1px solid #2F4156;
+  }
+  .rsvp-btn-no.active {
+    background-color: #C8D9E6;
+  }
+
+  input.elegant-input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #567C8D;
+    outline: none;
+  }
+  input.elegant-input:focus {
+    border-bottom: 1px solid #2F4156;
+  }
+
+  .gallery-track {
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+  .gallery-track > * {
+    scroll-snap-align: center;
+  }
+  .gallery-track::-webkit-scrollbar { display: none; }
+  .gallery-track { scrollbar-width: none; }
+
+  .letter-spacing-wide { letter-spacing: 0.28em; }
+
+  /* Floating music player */
+  .music-toggle {
+    width: 56px;
+    height: 56px;
+    background-color: #2F4156;
+    color: #F5EFEB;
+    box-shadow: 0 10px 24px -6px rgba(47,65,86,0.5);
+    transition: transform 0.3s ease, background-color 0.3s ease;
+  }
+  .music-toggle:hover {
+    transform: scale(1.06);
+  }
+  .music-toggle .music-disc {
+    animation: spin-disc 4.5s linear infinite;
+    animation-play-state: paused;
+  }
+  .music-toggle.playing .music-disc {
+    animation-play-state: running;
+  }
+  .music-toggle .music-bars {
+    display: none;
+  }
+  .music-toggle.playing .music-note {
+    display: none;
+  }
+  .music-toggle.playing .music-bars {
+    display: flex;
+  }
+  @keyframes spin-disc {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  .music-bars span {
+    display: inline-block;
+    width: 3px;
+    background: #F5EFEB;
+    border-radius: 2px;
+    animation: bar-bounce 0.9s ease-in-out infinite;
+  }
+  .music-bars span:nth-child(1) { height: 10px; animation-delay: 0s; }
+  .music-bars span:nth-child(2) { height: 18px; animation-delay: 0.15s; }
+  .music-bars span:nth-child(3) { height: 8px; animation-delay: 0.3s; }
+  @keyframes bar-bounce {
+    0%, 100% { transform: scaleY(0.5); }
+    50% { transform: scaleY(1.3); }
+  }
+
+  /* Carousel / Slider */
+  .carousel-container {
+    width: 100%;
+  }
+  .carousel {
+    position: relative;
+    background: #f0f0f0;
+  }
+  .carousel-track {
+    display: flex;
+  }
+  .carousel-slide {
+    display: block;
+  }
+  .carousel-btn {
+    opacity: 0;
+    transition: opacity 0.3s ease, background-color 0.3s ease;
+  }
+  .carousel-container:hover .carousel-btn {
+    opacity: 1;
+  }
+  @media (max-width: 640px) {
+    .carousel-btn {
+      opacity: 0.5 !important;
+    }
+  }
+</style>
+</head>
+<body class="tartan-bg overflow-x-hidden intro-active">
+
+<!-- ============ INTERACTIVE OPENING SCREEN ============ -->
+<div id="introOverlay" class="intro-overlay tartan-dark">
+  <div class="text-center max-w-sm w-full">
+    <div class="intro-anim intro-anim-1 mb-6 flex items-center justify-center gap-3">
+      <span class="h-px w-8 bg-sky/40"></span>
+      <span class="letter-spacing-wide text-xs text-sky/80 uppercase">Вы приглашены</span>
+      <span class="h-px w-8 bg-sky/40"></span>
+    </div>
+
+    <div class="intro-anim intro-anim-2 border-2 border-sky/30 rounded-3xl px-8 sm:px-10 py-9 sm:py-10 mb-9">
+      <p class="font-serif italic text-3xl sm:text-4xl text-beige mb-2">Leon &amp; Marcel</p>
+      <p class="letter-spacing-wide text-xs text-sky/70 uppercase mb-5">Первый День Рождения</p>
+      <div class="h-px w-16 bg-teal/50 mx-auto mb-5"></div>
+      <p class="font-display text-lg sm:text-xl text-beige/90">27 июля 2026</p>
+    </div>
+
+    <button id="openInviteBtn" type="button"
+      class="intro-anim intro-anim-3 btn-beige inline-flex items-center gap-3 px-8 sm:px-10 py-4 sm:py-5 rounded-full text-xs sm:text-sm letter-spacing-wide uppercase font-medium">
+      Открыть приглашение
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M5 12h14M13 6l6 6-6 6"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<!-- ============ FLOATING MUSIC PLAYER ============ -->
+<audio id="bgMusic" loop preload="none">
+  <source src="assets/music/twins-lullaby.mp3" type="audio/mpeg">
+</audio>
+
+<button id="musicToggle" type="button" aria-label="Включить фоновую музыку"
+  class="music-toggle fixed bottom-6 right-6 z-50 rounded-full flex items-center justify-center">
+  <svg class="music-note music-disc" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+    <circle cx="12" cy="12" r="9.5"/>
+    <circle cx="12" cy="12" r="2.4" fill="currentColor"/>
+    <path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3"/>
+  </svg>
+  <span class="music-bars items-end gap-[3px] h-[18px]">
+    <span></span><span></span><span></span>
+  </span>
+</button>
+
+<!-- ============ SCREEN 1 — HERO ============ -->
+<section class="relative min-h-screen flex flex-col items-center justify-center px-6 py-16 sm:py-24 text-center">
+  <div class="absolute inset-0 tartan-bg"></div>
+
+  <div class="relative z-10 w-full max-w-2xl mx-auto flex flex-col items-center justify-center min-h-screen py-20">
+
+    <!-- Decorative top element -->
+    <div class="hero-anim hero-anim-1 mb-8 sm:mb-12 flex items-center gap-3 sm:gap-4">
+      <div class="h-px flex-grow bg-teal/30"></div>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-navy/40 flex-shrink-0">
+        <path d="M12 2L15.09 8.26H22L17.45 12.74L19.54 18.74L12 14.26L4.46 18.74L6.55 12.74L2 8.26H8.91L12 2Z"/>
+      </svg>
+      <div class="h-px flex-grow bg-teal/30"></div>
+    </div>
+
+    <!-- Subtitle prefix -->
+    <p class="hero-anim hero-anim-2 letter-spacing-wide text-xs sm:text-sm text-teal/70 uppercase mb-6 tracking-widest">Приглашение на первый День рождения</p>
+
+    <!-- Main names with decorative box -->
+    <div class="hero-anim hero-anim-3 mb-8 sm:mb-12 border-2 border-teal/40 rounded-3xl px-8 sm:px-12 py-8 sm:py-10 relative">
+      <h1 class="font-serif italic text-4xl sm:text-5xl md:text-6xl text-navy leading-tight mb-3">
+        Leon &amp; Marcel
+      </h1>
+      <p class="font-display text-xl sm:text-2xl text-teal italic">Нам исполняется 1 год!</p>
+    </div>
+
+    <!-- Description -->
+    <p class="hero-anim hero-anim-4 font-display text-sm sm:text-base text-navy/80 leading-relaxed max-w-lg mb-12 sm:mb-14 px-2">
+      С огромной радостью приглашаем вас разделить с нами самый первый День рождения наших мальчиков.
+    </p>
+
+    <!-- Date and time info -->
+    <div class="hero-anim hero-anim-5 mb-14 sm:mb-16 w-full max-w-sm">
+      <div class="grid grid-cols-1 gap-4 sm:gap-6">
+        <div class="bg-white/60 backdrop-blur-sm border border-teal/20 rounded-2xl px-6 sm:px-8 py-6">
+          <p class="letter-spacing-wide text-xs text-teal/60 uppercase mb-2">Дата</p>
+          <p class="font-serif text-2xl sm:text-3xl text-navy font-light">27 июля 2026</p>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="bg-white/60 backdrop-blur-sm border border-teal/20 rounded-2xl px-4 sm:px-6 py-5">
+            <p class="letter-spacing-wide text-xs text-teal/60 uppercase mb-1 tracking-wide">Сбор</p>
+            <p class="font-serif text-2xl sm:text-2xl text-navy font-light">14:00</p>
+          </div>
+          <div class="bg-white/60 backdrop-blur-sm border border-teal/20 rounded-2xl px-4 sm:px-6 py-5">
+            <p class="letter-spacing-wide text-xs text-teal/60 uppercase mb-1 tracking-wide">Начало</p>
+            <p class="font-serif text-2xl sm:text-2xl text-navy font-light">15:00</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Location -->
+    <div class="hero-anim hero-anim-6 mb-14 sm:mb-16">
+      <p class="letter-spacing-wide text-xs text-teal/60 uppercase mb-2 tracking-wide">Место проведения</p>
+      <p class="font-display text-lg sm:text-xl text-navy">Muras resort</p>
+    </div>
+
+    <!-- CTA Button -->
+    <a href="#welcome" class="hero-anim hero-anim-7 btn-navy inline-flex items-center gap-3 px-8 sm:px-10 py-4 sm:py-5 rounded-full text-xs sm:text-sm letter-spacing-wide uppercase font-medium hover:shadow-xl transition-all">
+      Узнать подробнее
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 5v14M19 12l-7 7-7-7"/>
+      </svg>
+    </a>
+
+    <!-- Decorative bottom element -->
+    <div class="hero-anim hero-anim-7 absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3">
+      <div class="h-1 w-1 rounded-full bg-teal/30"></div>
+      <div class="h-1 w-1 rounded-full bg-teal/20"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SCREEN 2 — WELCOME ============ -->
+<section id="welcome" class="relative py-24 sm:py-32 px-6 bg-white">
+  <div class="max-w-xl mx-auto text-center reveal">
+    <p class="letter-spacing-wide text-xs text-teal uppercase mb-4">Наша история</p>
+    <h2 class="font-serif text-3xl sm:text-4xl md:text-5xl text-navy mb-8 leading-tight">
+      Дорогие родные<br class="hidden sm:block"> и друзья!
+    </h2>
+    <div class="divider-line mx-auto mb-8"></div>
+    <p class="font-display text-lg sm:text-xl text-navy/80 leading-relaxed">
+      Совсем недавно наши малыши появились на свет, сделали свои первые шаги, подарили нам тысячи счастливых моментов.
+      И теперь настало время отметить их самый первый День рождения вместе с теми, кто был рядом на этом пути.
+      Будем счастливы видеть вас в этот особенный день.
+    </p>
+
+    <div class="grid grid-cols-2 gap-4 sm:gap-6 mt-14 reveal reveal-delay-2">
+      <img src="assets/images/family/twins-crawling.jpeg" alt="Леон и Марсель" class="w-full aspect-[3/4] object-cover rounded-[28px] shadow-md">
+      <img src="assets/images/family/twins-with-mom.jpeg" alt="Леон, Марсель и мама" class="w-full aspect-[3/4] object-cover rounded-[28px] shadow-md mt-8">
+    </div>
+  </div>
+</section>
+
+<!-- ============ SCREEN 3 — WHEN & WHERE ============ -->
+<section class="relative py-24 sm:py-32 px-6 tartan-bg">
+  <div class="max-w-4xl mx-auto reveal">
+    <div class="text-center mb-14">
+      <p class="letter-spacing-wide text-xs text-teal uppercase mb-4">Когда и где</p>
+      <h2 class="font-serif text-3xl sm:text-4xl md:text-5xl text-navy">Ждем вас</h2>
+    </div>
+
+    <div class="grid sm:grid-cols-2 gap-6 sm:gap-8">
+      <div class="reveal reveal-delay-1 bg-white rounded-[28px] px-8 py-10 text-center shadow-sm border border-sky flex flex-col items-center justify-center">
+        <p class="letter-spacing-wide text-xs text-teal uppercase mb-3">Дата и время</p>
+        <p class="font-serif text-2xl sm:text-3xl text-navy mb-1">27 июля 2026 года</p>
+        <p class="font-display text-xl text-navy/70">Сбор 14:00 · Начало 15:00</p>
+      </div>
+
+      <div class="reveal reveal-delay-2 bg-white rounded-[28px] px-8 py-10 text-center shadow-sm border border-sky flex flex-col items-center justify-center">
+        <p class="letter-spacing-wide text-xs text-teal uppercase mb-3">Место проведения</p>
+        <p class="font-serif text-2xl sm:text-3xl text-navy mb-1">Muras resort</p>
+      </div>
+    </div>
+
+    <div class="mt-8 sm:mt-10 reveal reveal-delay-3">
+      <img src="assets/images/venue/WhatsApp Image 2026-07-02 at 20.11.25.jpeg" alt="Оформление праздника"
+        class="w-full max-w-2xl mx-auto rounded-[28px] shadow-md border border-sky">
+    </div>
+
+    <div class="flex justify-center mt-10 reveal reveal-delay-3">
+      <a href="https://maps.google.com/?q=" target="_blank" rel="noopener"
+         class="btn-navy inline-flex items-center gap-2 px-8 py-4 rounded-full text-sm letter-spacing-wide uppercase">
+        Построить маршрут
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SCREEN 4 — DRESS CODE ============ -->
+<section class="relative py-24 sm:py-32 px-6 bg-white">
+  <div class="max-w-5xl mx-auto reveal">
+    <div class="text-center mb-12">
+      <p class="letter-spacing-wide text-xs text-teal uppercase mb-4">Стиль торжества</p>
+      <h2 class="font-serif text-3xl sm:text-4xl md:text-5xl text-navy mb-6">Dress Code</h2>
+      <div class="divider-line mx-auto mb-6"></div>
+      <p class="font-display text-lg sm:text-xl text-navy/80 max-w-xl mx-auto">
+        Нам будет очень приятно, если вы поддержите стиль нашего праздника.
+      </p>
+    </div>
+
+    <!-- Palette circles -->
+    <div class="flex justify-center gap-6 sm:gap-10 mb-14 reveal reveal-delay-1">
+      <div class="flex flex-col items-center gap-2">
+        <span class="block w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-white border border-navy/20 shadow"></span>
+        <span class="text-xs uppercase tracking-wide text-navy/60">Белый</span>
+      </div>
+      <div class="flex flex-col items-center gap-2">
+        <span class="block w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-beige border border-navy/20 shadow"></span>
+        <span class="text-xs uppercase tracking-wide text-navy/60">Бежевый</span>
+      </div>
+      <div class="flex flex-col items-center gap-2">
+        <span class="block w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-navy shadow"></span>
+        <span class="text-xs uppercase tracking-wide text-navy/60">Тёмно-синий</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SCREEN 4a — DRESS CODE MEN ============ -->
+<section class="relative py-24 sm:py-32 px-6 tartan-bg">
+  <div class="max-w-5xl mx-auto reveal">
+    <div class="text-center mb-12">
+      <p class="letter-spacing-wide text-xs text-teal uppercase mb-3">Для мужчин</p>
+      <h3 class="font-serif text-2xl sm:text-3xl text-navy mb-2">Классический стиль</h3>
+      <p class="font-display text-base sm:text-lg text-navy/70">Smart Casual: льняные рубашки, лоферы, светлые брюки</p>
+    </div>
+
+    <div class="carousel-container relative reveal reveal-delay-1">
+      <div class="carousel overflow-hidden rounded-[28px]">
+        <div class="carousel-track flex transition-transform duration-500 ease-out" style="transform: translateX(0);">
+          <img src="assets/images/men/WhatsApp Image 2026-07-02 at 20.56.00.jpeg" alt="Образец для мужчин 1" class="carousel-slide w-full sm:w-1/3 flex-shrink-0 aspect-[3/4] object-cover">
+          <img src="assets/images/men/WhatsApp Image 2026-07-02 at 20.56.01 (1).jpeg" alt="Образец для мужчин 2" class="carousel-slide w-full sm:w-1/3 flex-shrink-0 aspect-[3/4] object-cover">
+          <img src="assets/images/men/WhatsApp Image 2026-07-02 at 20.56.01.jpeg" alt="Образец для мужчин 3" class="carousel-slide w-full sm:w-1/3 flex-shrink-0 aspect-[3/4] object-cover">
+        </div>
+      </div>
+      <button class="carousel-btn carousel-btn-prev absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-navy/70 hover:bg-navy text-white w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 -translate-x-5 sm:translate-x-0">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <button class="carousel-btn carousel-btn-next absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-navy/70 hover:bg-navy text-white w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 translate-x-5 sm:translate-x-0">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SCREEN 4b — DRESS CODE WOMEN ============ -->
+<section class="relative py-24 sm:py-32 px-6 bg-white">
+  <div class="max-w-5xl mx-auto reveal">
+    <div class="text-center mb-12">
+      <p class="letter-spacing-wide text-xs text-teal uppercase mb-3">Для женщин</p>
+      <h3 class="font-serif text-2xl sm:text-3xl text-navy mb-2">Элегантный стиль</h3>
+      <p class="font-display text-base sm:text-lg text-navy/70">Белые, молочные, тёмно-синие наряды; без ярких оттенков и крупных принтов</p>
+    </div>
+
+    <div class="carousel-container relative reveal reveal-delay-1">
+        <div class="carousel-track flex transition-transform duration-500 ease-out" style="transform: translateX(0);">
+          <img src="assets/images/women/WhatsApp Image 2026-07-02 at 20.56.28 (1).jpeg" alt="Образец для женщин 1" class="carousel-slide w-full sm:w-1/3 flex-shrink-0 aspect-[3/4] object-cover">
+          <img src="assets/images/women/WhatsApp Image 2026-07-02 at 20.56.28.jpeg" alt="Образец для женщин 2" class="carousel-slide w-full sm:w-1/3 flex-shrink-0 aspect-[3/4] object-cover">
+          <img src="assets/images/women/WhatsApp Image 2026-07-02 at 20.56.29 (1).jpeg" alt="Образец для женщин 3" class="carousel-slide w-full sm:w-1/3 flex-shrink-0 aspect-[3/4] object-cover">
+        </div>
+      </div>
+      <button class="carousel-btn carousel-btn-prev absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-navy/70 hover:bg-navy text-white w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 -translate-x-5 sm:translate-x-0">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <button class="carousel-btn carousel-btn-next absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-navy/70 hover:bg-navy text-white w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 translate-x-5 sm:translate-x-0">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SCREEN 4c — DRESS CODE COUPLES ============ -->
+<section class="relative py-24 sm:py-32 px-6 tartan-bg">
+  <div class="max-w-5xl mx-auto reveal">
+    <div class="text-center mb-12">
+      <p class="letter-spacing-wide text-xs text-teal uppercase mb-3">Для пар</p>
+      <h3 class="font-serif text-2xl sm:text-3xl text-navy mb-2">Гармоничный стиль</h3>
+      <p class="font-display text-base sm:text-lg text-navy/70">Дополняющие друг друга образы в едином цветовом решении</p>
+    </div>
+
+    <div class="carousel-container relative reveal reveal-delay-1">
+      <div class="carousel overflow-hidden rounded-[28px]">
+        <div class="carousel-track flex transition-transform duration-500 ease-out" style="transform: translateX(0);">
+          <img src="assets/images/couples/WhatsApp Image 2026-07-02 at 20.57.01.jpeg" alt="Образец для пар 1" class="carousel-slide w-full sm:w-1/3 flex-shrink-0 aspect-[3/4] object-cover">
+          <img src="assets/images/couples/WhatsApp Image 2026-07-02 at 20.57.01 (2).jpeg" alt="Образец для пар 2" class="carousel-slide w-full sm:w-1/3 flex-shrink-0 aspect-[3/4] object-cover">
+          <img src="assets/images/couples/WhatsApp Image 2026-07-02 at 20.57.01 (3).jpeg" alt="Образец для пар 3" class="carousel-slide w-full sm:w-1/3 flex-shrink-0 aspect-[3/4] object-cover">
+        </div>
+      </div>
+      <button class="carousel-btn carousel-btn-prev absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-navy/70 hover:bg-navy text-white w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 -translate-x-5 sm:translate-x-0">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <button class="carousel-btn carousel-btn-next absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-navy/70 hover:bg-navy text-white w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 translate-x-5 sm:translate-x-0">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SCREEN 4d — DRESS CODE KIDS ============ -->
+<section class="relative py-24 sm:py-32 px-6 bg-white">
+  <div class="max-w-5xl mx-auto reveal">
+    <div class="text-center mb-12">
+      <p class="letter-spacing-wide text-xs text-teal uppercase mb-3">Для детей</p>
+      <h3 class="font-serif text-2xl sm:text-3xl text-navy mb-2">Праздничный стиль</h3>
+      <p class="font-display text-base sm:text-lg text-navy/70">Яркие, комфортные образы в цветовой палитре праздника</p>
+    </div>
+
+    <div class="carousel-container relative reveal reveal-delay-1">
+      <div class="carousel overflow-hidden rounded-[28px]">
+        <div class="carousel-track flex transition-transform duration-500 ease-out" style="transform: translateX(0);">
+          <img src="assets/images/kids/WhatsApp Image 2026-07-02 at 23.44.58.jpeg" alt="Образец для детей 1" class="carousel-slide w-full sm:w-1/3 flex-shrink-0 aspect-[3/4] object-cover">
+          <img src="assets/images/kids/WhatsApp Image 2026-07-02 at 23.44.58 (2).jpeg" alt="Образец для детей 2" class="carousel-slide w-full sm:w-1/3 flex-shrink-0 aspect-[3/4] object-cover">
+          <img src="assets/images/kids/WhatsApp Image 2026-07-02 at 23.44.58 (3).jpeg" alt="Образец для детей 3" class="carousel-slide w-full sm:w-1/3 flex-shrink-0 aspect-[3/4] object-cover">
+        </div>
+      </div>
+      <button class="carousel-btn carousel-btn-prev absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-navy/70 hover:bg-navy text-white w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 -translate-x-5 sm:translate-x-0">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <button class="carousel-btn carousel-btn-next absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-navy/70 hover:bg-navy text-white w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 translate-x-5 sm:translate-x-0">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SCREEN 5 — PROGRAM OF THE DAY ============ -->
+<section class="relative py-24 sm:py-32 px-6 tartan-dark text-beige">
+  <div class="max-w-3xl mx-auto reveal">
+    <div class="text-center mb-16">
+      <p class="letter-spacing-wide text-xs text-sky uppercase mb-4">Программа дня</p>
+      <h2 class="font-serif text-3xl sm:text-4xl md:text-5xl text-beige">Вас ждёт</h2>
+    </div>
+
+    <ul class="grid sm:grid-cols-2 gap-x-10 gap-y-8">
+      <li class="flex items-start gap-4 reveal reveal-delay-1">
+        <span class="mt-1 flex-shrink-0 w-10 h-10 rounded-full border border-sky/50 flex items-center justify-center">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M17 8h4M19 6v4"/></svg>
+        </span>
+        <span class="font-display text-lg sm:text-xl pt-2">Welcome-зона</span>
+      </li>
+      <li class="flex items-start gap-4 reveal reveal-delay-1">
+        <span class="mt-1 flex-shrink-0 w-10 h-10 rounded-full border border-sky/50 flex items-center justify-center">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="6" width="18" height="14" rx="2"/><circle cx="12" cy="13" r="3.4"/><path d="M8 6l1.2-2h5.6L16 6"/></svg>
+        </span>
+        <span class="font-display text-lg sm:text-xl pt-2">Стильная фотозона</span>
+      </li>
+      <li class="flex items-start gap-4 reveal reveal-delay-2">
+        <span class="mt-1 flex-shrink-0 w-10 h-10 rounded-full border border-sky/50 flex items-center justify-center">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 3v6a3 3 0 0 0 6 0V3M9 9v12M17 3c-1.5 1.5-2 3-2 5s.5 3.5 2 5c1.5-1.5 2-3 2-5s-.5-3.5-2-5zM17 13v8"/></svg>
+        </span>
+        <span class="font-display text-lg sm:text-xl pt-2">Праздничный ужин</span>
+      </li>
+      <li class="flex items-start gap-4 reveal reveal-delay-2">
+        <span class="mt-1 flex-shrink-0 w-10 h-10 rounded-full border border-sky/50 flex items-center justify-center">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 10 12 4l10 6-10 6-10-6z"/><path d="M6 12.5V17c0 1.5 3 3 6 3s6-1.5 6-3v-4.5"/></svg>
+        </span>
+        <span class="font-display text-lg sm:text-xl pt-2">Развлекательная шоу-программа</span>
+      </li>
+      <li class="flex items-start gap-4 reveal reveal-delay-3">
+        <span class="mt-1 flex-shrink-0 w-10 h-10 rounded-full border border-sky/50 flex items-center justify-center">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/></svg>
+        </span>
+        <span class="font-display text-lg sm:text-xl pt-2">Аниматоры</span>
+      </li>
+      <li class="flex items-start gap-4 reveal reveal-delay-3">
+        <span class="mt-1 flex-shrink-0 w-10 h-10 rounded-full border border-sky/50 flex items-center justify-center">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 21h16M5 21V11h14v10M9 11V8a3 3 0 0 1 6 0v3M12 5V3"/></svg>
+        </span>
+        <span class="font-display text-lg sm:text-xl pt-2">Торжественный вынос торта</span>
+      </li>
+      <li class="flex items-start gap-4 reveal reveal-delay-4 sm:col-span-2 sm:justify-center">
+        <span class="mt-1 flex-shrink-0 w-10 h-10 rounded-full border border-sky/50 flex items-center justify-center">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 21s-7-4.35-9.5-8.8C1 8.6 2.7 5 6.2 5 8.4 5 10 6.3 12 8.4 14 6.3 15.6 5 17.8 5 21.3 5 23 8.6 21.5 12.2 19 16.65 12 21 12 21z"/></svg>
+        </span>
+        <span class="font-display text-lg sm:text-xl pt-2">Много тёплых моментов</span>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ SCREEN 6 — GIFTS ============ -->
+<section class="relative py-24 sm:py-32 px-6 bg-white">
+  <div class="max-w-xl mx-auto text-center reveal">
+    <p class="letter-spacing-wide text-xs text-teal uppercase mb-4">От всего сердца</p>
+    <h2 class="font-serif text-3xl sm:text-4xl md:text-5xl text-navy mb-8">Самый главный подарок</h2>
+    <div class="divider-line mx-auto mb-8"></div>
+    <p class="font-display text-lg sm:text-xl text-navy/80 leading-relaxed">
+      Для наших малышей самым ценным подарком станет ваше присутствие. Если вы планируете поздравить нас подарком,
+      мы будем благодарны за вклад в их будущие мечты.
+    </p>
+  </div>
+</section>
+
+<!-- ============ SCREEN 7 — RSVP ============ -->
+<section id="rsvp" class="relative py-24 sm:py-32 px-6 tartan-bg">
+  <div class="max-w-lg mx-auto reveal">
+    <div class="bg-white rounded-[32px] shadow-lg border border-sky px-7 sm:px-12 py-12 sm:py-14 text-center">
+      <p class="letter-spacing-wide text-xs text-teal uppercase mb-4">RSVP</p>
+      <h2 class="font-serif text-2xl sm:text-3xl md:text-4xl text-navy mb-3 leading-snug">
+        Пожалуйста, подтвердите своё присутствие
+      </h2>
+      <p class="font-sans text-sm text-navy/60 mb-10">
+        Будем признательны, если вы сообщите о своём решении до 20 июля.
+      </p>
+
+      <form id="rsvpForm" class="flex flex-col gap-8">
+        <input
+          type="text"
+          required
+          placeholder="Ваше имя"
+          class="elegant-input font-display text-xl text-center text-navy placeholder:text-navy/40 py-3"
+        >
+
+        <div class="text-center">
+          <label for="guestCount" class="block letter-spacing-wide text-xs text-teal/70 uppercase mb-2">Количество гостей</label>
+          <input
+            id="guestCount"
+            type="number"
+            min="1"
+            value="1"
+            required
+            class="elegant-input font-display text-xl text-center text-navy placeholder:text-navy/40 py-3 w-24 mx-auto block"
+          >
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-4">
+          <button type="button" data-choice="yes"
+            class="rsvp-choice rsvp-btn-yes flex-1 px-6 py-4 rounded-full text-sm letter-spacing-wide uppercase transition-all duration-300">
+            ✅ Будем
+          </button>
+          <button type="button" data-choice="no"
+            class="rsvp-choice rsvp-btn-no flex-1 px-6 py-4 rounded-full text-sm letter-spacing-wide uppercase transition-all duration-300">
+            ❌ К сожалению, не сможем
+          </button>
+        </div>
+
+        <textarea
+          rows="3"
+          placeholder="Пожелания (необязательно)"
+          class="elegant-input font-display text-lg text-center text-navy placeholder:text-navy/40 py-3 resize-none"
+        ></textarea>
+
+        <button type="submit" class="btn-navy mt-2 px-8 py-4 rounded-full text-sm letter-spacing-wide uppercase">
+          Отправить
+        </button>
+      </form>
+
+      <p id="rsvpThanks" class="hidden font-display text-lg text-navy mt-8">
+        Благодарим! Ваш ответ получен 🤍
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SCREEN 8 — FOOTER ============ -->
+<footer class="relative pt-24 sm:pt-32 pb-14 px-6 tartan-dark text-beige">
+  <div class="max-w-md mx-auto flex flex-col items-center text-center reveal">
+
+    <div class="arch-frame w-56 sm:w-64 aspect-[3/4] mb-12 border-4 border-sky/30 shadow-2xl bg-beige">
+      <img src="assets/images/branding/leon-marcel-names.png" alt="Leon & Marcel" class="w-full h-full object-cover">
+    </div>
+
+    <h2 class="font-serif italic text-3xl sm:text-4xl mb-6">С нетерпением ждём встречи!</h2>
+
+    <div class="divider-line bg-sky/40 mx-auto mb-6"></div>
+
+    <p class="font-display text-lg sm:text-xl text-sky/90">
+      С любовью, Александр, Даткайым<br class="sm:hidden"> и наша семья 🤍
+    </p>
+
+    <p class="mt-14 text-xs text-sky/50 letter-spacing-wide uppercase">Leon &amp; Marcel · 27 июля 2026</p>
+  </div>
+</footer>
+
+<script>
+  // Interactive opening screen
+  const introOverlay = document.getElementById('introOverlay');
+  const openInviteBtn = document.getElementById('openInviteBtn');
+  openInviteBtn.addEventListener('click', () => {
+    introOverlay.classList.add('is-closing');
+    document.body.classList.remove('intro-active');
+    document.body.classList.add('is-opened');
+    setTimeout(() => introOverlay.remove(), 850);
+  });
+
+  // Reveal on scroll
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+
+  revealEls.forEach(el => {
+    if (!el.classList.contains('is-visible')) observer.observe(el);
+  });
+
+  // RSVP choice toggle
+  const choiceButtons = document.querySelectorAll('.rsvp-choice');
+  let rsvpChoice = null;
+  choiceButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      choiceButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      rsvpChoice = btn.dataset.choice;
+    });
+  });
+
+  // RSVP submit (front-end only demo)
+  const rsvpForm = document.getElementById('rsvpForm');
+  const rsvpThanks = document.getElementById('rsvpThanks');
+  rsvpForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    rsvpForm.classList.add('hidden');
+    rsvpThanks.classList.remove('hidden');
+  });
+
+  // Background music
+  const bgMusic = document.getElementById('bgMusic');
+  const musicToggle = document.getElementById('musicToggle');
+  let musicPlaying = false;
+
+  function setPlayingState(state) {
+    musicPlaying = state;
+    musicToggle.classList.toggle('playing', state);
+    musicToggle.setAttribute('aria-label', state ? 'Выключить фоновую музыку' : 'Включить фоновую музыку');
+  }
+
+  function startMusic() {
+    if (musicPlaying) return;
+    bgMusic.volume = 0.5;
+    bgMusic.play()
+      .then(() => setPlayingState(true))
+      .catch(() => setPlayingState(false));
+  }
+
+  musicToggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (musicPlaying) {
+      bgMusic.pause();
+      setPlayingState(false);
+    } else {
+      startMusic();
+    }
+  });
+
+  // Browsers block autoplay without a gesture — start on the visitor's first tap/click/scroll
+  ['click', 'touchstart', 'scroll', 'keydown'].forEach(evt => {
+    document.addEventListener(evt, function firstGesture() {
+      startMusic();
+    }, { once: true, passive: true });
+  });
+
+  // Carousels / Sliders
+  const carousels = document.querySelectorAll('.carousel-container');
+  carousels.forEach(carousel => {
+    const track = carousel.querySelector('.carousel-track');
+    const slides = carousel.querySelectorAll('.carousel-slide');
+    const prevBtn = carousel.querySelector('.carousel-btn-prev');
+    const nextBtn = carousel.querySelector('.carousel-btn-next');
+
+    let currentIndex = 0;
+    const slidesCount = slides.length;
+    let isMobile = window.innerWidth < 640;
+    let itemsVisible = isMobile ? 1 : 3;
+
+    const updateCarousel = () => {
+      const slideWidth = 100 / itemsVisible;
+      const offset = -currentIndex * slideWidth;
+      track.style.transform = `translateX(${offset}%)`;
+    };
+
+    const goToSlide = (index) => {
+      currentIndex = (index + slidesCount) % slidesCount;
+      updateCarousel();
+    };
+
+    prevBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      goToSlide(currentIndex - 1);
+    });
+
+    nextBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      goToSlide(currentIndex + 1);
+    });
+
+    // Handle window resize
+    const handleResize = () => {
+      isMobile = window.innerWidth < 640;
+      itemsVisible = isMobile ? 1 : 3;
+      updateCarousel();
+    };
+
+    window.addEventListener('resize', handleResize);
+    updateCarousel();
+  });
+</script>
+
+</body>
+</html>
