@@ -687,6 +687,7 @@
       <form id="rsvpForm" class="flex flex-col gap-8">
         <input
           type="text"
+          name="name"
           required
           placeholder="Ваше имя"
           class="elegant-input font-display text-xl text-center text-navy placeholder:text-navy/40 py-3"
@@ -696,6 +697,7 @@
           <label for="guestCount" class="block letter-spacing-wide text-xs text-teal/70 uppercase mb-2">Количество гостей</label>
           <input
             id="guestCount"
+            name="guests"
             type="number"
             min="1"
             value="1"
@@ -703,6 +705,8 @@
             class="elegant-input font-display text-xl text-center text-navy placeholder:text-navy/40 py-3 w-24 mx-auto block"
           >
         </div>
+
+        <input type="hidden" id="attendance" name="attendance" value="">
 
         <div class="flex flex-col sm:flex-row gap-4">
           <button type="button" data-choice="yes"
@@ -716,6 +720,7 @@
         </div>
 
         <textarea
+          name="wishes"
           rows="3"
           placeholder="Пожелания"
           class="elegant-input font-display text-lg text-center text-navy placeholder:text-navy/40 py-3 resize-none"
@@ -787,16 +792,43 @@
       choiceButtons.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       rsvpChoice = btn.dataset.choice;
+      document.getElementById('attendance').value = rsvpChoice === 'yes' ? 'Будем' : 'К сожалению, не сможем';
     });
   });
 
-  // RSVP submit (front-end only demo)
+  // RSVP submit to Formspree
   const rsvpForm = document.getElementById('rsvpForm');
   const rsvpThanks = document.getElementById('rsvpThanks');
-  rsvpForm.addEventListener('submit', (e) => {
+  const attendanceInput = document.getElementById('attendance');
+
+  rsvpForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    rsvpForm.classList.add('hidden');
-    rsvpThanks.classList.remove('hidden');
+
+    if (!attendanceInput.value) {
+      alert('Пожалуйста, выберите "Будем" или "К сожалению, не сможем"');
+      return;
+    }
+
+    const formData = new FormData(rsvpForm);
+
+    try {
+      const response = await fetch('https://formspree.io/f/mjgqjzyk', {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        rsvpForm.classList.add('hidden');
+        rsvpThanks.classList.remove('hidden');
+      } else {
+        alert('Ошибка отправки. Попробуйте ещё раз.');
+      }
+    } catch (error) {
+      alert('Ошибка отправки: ' + error.message);
+    }
   });
 
   // Background music
