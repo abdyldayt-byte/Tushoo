@@ -767,13 +767,23 @@
 <footer class="relative pt-24 sm:pt-32 pb-14 px-6 tartan-dark text-beige">
   <div class="max-w-md mx-auto flex flex-col items-center text-center reveal">
 
-    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6 w-full max-w-2xl mb-12">
-      <img src="assets/images/family/twins-family-1.jpg" alt="Leon & Marcel" class="w-full aspect-[3/4] object-cover rounded-[20px] shadow-md border border-sky/30">
-      <img src="assets/images/family/twins-family-2.jpg" alt="Leon & Marcel с мамой" class="w-full aspect-[3/4] object-cover rounded-[20px] shadow-md border border-sky/30">
-      <img src="assets/images/family/twins-family-3.jpg" alt="Семейный портрет" class="w-full aspect-[3/4] object-cover rounded-[20px] shadow-md border border-sky/30">
-      <img src="assets/images/family/twins-family-4.jpg" alt="Leon & Marcel" class="w-full aspect-[3/4] object-cover rounded-[20px] shadow-md border border-sky/30">
-      <img src="assets/images/family/twins-family-5.jpg" alt="Мама с малышом" class="w-full aspect-[3/4] object-cover rounded-[20px] shadow-md border border-sky/30">
-      <img src="assets/images/family/twins-bw-crawling.jpeg" alt="Leon & Marcel - чёрно-белое" class="w-full aspect-[3/4] object-cover rounded-[20px] shadow-md border border-sky/30">
+    <div class="family-carousel-container relative w-full max-w-2xl mb-12">
+      <div class="carousel overflow-hidden rounded-[28px] shadow-lg">
+        <div class="carousel-track flex transition-transform duration-500 ease-out" style="transform: translateX(0);">
+          <img src="assets/images/family/twins-family-1.jpeg" alt="Семейный момент" class="carousel-slide w-full flex-shrink-0 aspect-[3/4] object-cover">
+          <img src="assets/images/family/twins-family-2.jpeg" alt="Мама и малыш" class="carousel-slide w-full flex-shrink-0 aspect-[3/4] object-cover">
+          <img src="assets/images/family/twins-family-3.jpeg" alt="Leon & Marcel" class="carousel-slide w-full flex-shrink-0 aspect-[3/4] object-cover">
+          <img src="assets/images/family/twins-family-4.jpeg" alt="Папа и малыш" class="carousel-slide w-full flex-shrink-0 aspect-[3/4] object-cover">
+          <img src="assets/images/family/twins-family-5.jpeg" alt="Мама с малышом" class="carousel-slide w-full flex-shrink-0 aspect-[3/4] object-cover">
+          <img src="assets/images/family/twins-bw-crawling.jpeg" alt="Leon & Marcel" class="carousel-slide w-full flex-shrink-0 aspect-[3/4] object-cover">
+        </div>
+      </div>
+      <button class="carousel-btn carousel-btn-prev absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-navy/70 hover:bg-navy text-white w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 -translate-x-5 sm:translate-x-2">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <button class="carousel-btn carousel-btn-next absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-navy/70 hover:bg-navy text-white w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 translate-x-5 sm:translate-x-2">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
     </div>
 
     <h2 class="font-serif italic text-3xl sm:text-4xl mb-6">С нетерпением ждём встречи!</h2>
