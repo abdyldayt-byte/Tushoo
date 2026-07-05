@@ -123,6 +123,20 @@
     opacity: 0;
     pointer-events: none;
   }
+  .intro-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+  }
+  .intro-video-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(47, 65, 86, 0.72);
+    z-index: 1;
+  }
   @keyframes introRise {
     0% { opacity: 0; transform: translateY(18px); }
     100% { opacity: 1; transform: translateY(0); }
@@ -297,7 +311,11 @@
 
 <!-- ============ INTERACTIVE OPENING SCREEN ============ -->
 <div id="introOverlay" class="intro-overlay tartan-dark">
-  <div class="text-center max-w-sm w-full">
+  <video id="introVideo" class="intro-video" autoplay muted loop playsinline preload="auto">
+    <source src="assets/video/opening-bg.mp4" type="video/mp4">
+  </video>
+  <div class="intro-video-overlay"></div>
+  <div class="relative z-10 text-center max-w-sm w-full">
     <div class="intro-anim intro-anim-1 mb-6 flex items-center justify-center gap-3">
       <span class="h-px w-8 bg-sky/40"></span>
       <span class="letter-spacing-wide text-xs text-sky/80 uppercase">Вы приглашены</span>
@@ -378,7 +396,7 @@
         </div>
         <div class="grid grid-cols-2 gap-4">
           <div class="bg-white/60 backdrop-blur-sm border border-teal/20 rounded-2xl px-4 sm:px-6 py-5">
-            <p class="letter-spacing-wide text-xs text-teal/60 uppercase mb-1 tracking-wide">Сбор</p>
+            <p class="letter-spacing-wide text-xs text-teal/60 uppercase mb-1 tracking-wide">Сбор гостей</p>
             <p class="font-serif text-2xl sm:text-2xl text-navy font-light">14:00</p>
           </div>
           <div class="bg-white/60 backdrop-blur-sm border border-teal/20 rounded-2xl px-4 sm:px-6 py-5">
@@ -444,22 +462,27 @@
       <div class="reveal reveal-delay-1 bg-white rounded-[28px] px-8 py-10 text-center shadow-sm border border-sky flex flex-col items-center justify-center">
         <p class="letter-spacing-wide text-xs text-teal uppercase mb-3">Дата и время</p>
         <p class="font-serif text-2xl sm:text-3xl text-navy mb-1">27 июля 2026 года</p>
-        <p class="font-display text-xl text-navy/70">Сбор 14:00 · Начало 15:00</p>
+        <p class="font-display text-xl text-navy/70">Сбор гостей 14:00 · Начало 15:00</p>
       </div>
 
       <div class="reveal reveal-delay-2 bg-white rounded-[28px] px-8 py-10 text-center shadow-sm border border-sky flex flex-col items-center justify-center">
         <p class="letter-spacing-wide text-xs text-teal uppercase mb-3">Место проведения</p>
-        <p class="font-serif text-2xl sm:text-3xl text-navy mb-1">Muras resort</p>
+        <p class="font-serif text-2xl sm:text-3xl text-navy mb-1">Muras Resort</p>
+        <p class="font-display text-base text-navy/70">Улица Таштар-Ата, 1а</p>
       </div>
     </div>
 
-    <div class="mt-8 sm:mt-10 reveal reveal-delay-3">
-      <img src="assets/images/venue/WhatsApp Image 2026-07-02 at 20.11.25.jpeg" alt="Оформление праздника"
-        class="w-full max-w-2xl mx-auto rounded-[28px] shadow-md border border-sky">
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6 mt-8 sm:mt-10 reveal reveal-delay-3">
+      <img src="assets/images/venue/muras-cinema-night.jpg" alt="Muras Resort — вечерний кинотеатр"
+        class="w-full aspect-[3/4] object-cover rounded-[24px] shadow-md border border-sky col-span-2 sm:col-span-1">
+      <img src="assets/images/venue/muras-pathway.jpg" alt="Muras Resort — аллея"
+        class="w-full aspect-[3/4] object-cover rounded-[24px] shadow-md border border-sky">
+      <img src="assets/images/venue/muras-dining.jpg" alt="Muras Resort — интерьер"
+        class="w-full aspect-[3/4] object-cover rounded-[24px] shadow-md border border-sky">
     </div>
 
     <div class="flex justify-center mt-10 reveal reveal-delay-3">
-      <a href="https://maps.google.com/?q=" target="_blank" rel="noopener"
+      <a href="https://go.2gis.com/hzufN" target="_blank" rel="noopener"
          class="btn-navy inline-flex items-center gap-2 px-8 py-4 rounded-full text-sm letter-spacing-wide uppercase">
         Построить маршрут
       </a>
@@ -474,9 +497,10 @@
       <p class="letter-spacing-wide text-xs text-teal uppercase mb-4">Стиль торжества</p>
       <h2 class="font-serif text-3xl sm:text-4xl md:text-5xl text-navy mb-6">Dress Code</h2>
       <div class="divider-line mx-auto mb-6"></div>
-      <p class="font-display text-lg sm:text-xl text-navy/80 max-w-xl mx-auto">
+      <p class="font-display text-lg sm:text-xl text-navy/80 max-w-xl mx-auto mb-3">
         Нам будет очень приятно, если вы поддержите стиль нашего праздника.
       </p>
+      <p class="letter-spacing-wide text-xs text-navy uppercase font-medium">Обязательный дресс код</p>
     </div>
 
     <!-- Palette circles -->
@@ -743,7 +767,7 @@
   <div class="max-w-md mx-auto flex flex-col items-center text-center reveal">
 
     <div class="arch-frame w-56 sm:w-64 aspect-[3/4] mb-12 border-4 border-sky/30 shadow-2xl bg-beige">
-      <img src="assets/images/branding/leon-marcel-names.png" alt="Leon & Marcel" class="w-full h-full object-cover">
+      <img src="assets/images/family/twins-bw-crawling.jpeg" alt="Leon & Marcel" class="w-full h-full object-cover">
     </div>
 
     <h2 class="font-serif italic text-3xl sm:text-4xl mb-6">С нетерпением ждём встречи!</h2>
@@ -762,6 +786,10 @@
   // Interactive opening screen
   const introOverlay = document.getElementById('introOverlay');
   const openInviteBtn = document.getElementById('openInviteBtn');
+  const introVideo = document.getElementById('introVideo');
+  if (introVideo) {
+    introVideo.playbackRate = 0.75;
+  }
   openInviteBtn.addEventListener('click', () => {
     introOverlay.classList.add('is-closing');
     document.body.classList.remove('intro-active');
