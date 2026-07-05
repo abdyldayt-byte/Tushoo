@@ -341,7 +341,7 @@
 
 <!-- ============ FLOATING MUSIC PLAYER ============ -->
 <audio id="bgMusic" loop preload="none">
-  <source src="assets/music/twins-lullaby.mp3" type="audio/mpeg">
+  <source src="assets/music/tushoo-audio.mp3" type="audio/mpeg">
 </audio>
 
 <button id="musicToggle" type="button" aria-label="Включить фоновую музыку"
@@ -863,6 +863,7 @@
   const bgMusic = document.getElementById('bgMusic');
   const musicToggle = document.getElementById('musicToggle');
   let musicPlaying = false;
+  let musicStarted = false;
 
   function setPlayingState(state) {
     musicPlaying = state;
@@ -873,6 +874,10 @@
   function startMusic() {
     if (musicPlaying) return;
     bgMusic.volume = 0.5;
+    if (!musicStarted) {
+      bgMusic.currentTime = 40;
+      musicStarted = true;
+    }
     bgMusic.play()
       .then(() => setPlayingState(true))
       .catch(() => setPlayingState(false));
