@@ -767,7 +767,7 @@
 <footer class="relative pt-24 sm:pt-32 pb-14 px-6 tartan-dark text-beige">
   <div class="max-w-md mx-auto flex flex-col items-center text-center reveal">
 
-    <div class="family-carousel-container relative w-full max-w-2xl mb-12">
+    <div class="carousel-container family-carousel relative w-full max-w-2xl mb-12" data-autoplay="true">
       <div class="carousel overflow-hidden rounded-[28px] shadow-lg">
         <div class="carousel-track flex transition-transform duration-500 ease-out" style="transform: translateX(0);">
           <img src="assets/images/family/twins-family-1.jpeg" alt="Семейный момент" class="carousel-slide w-full flex-shrink-0 aspect-[3/4] object-cover">
@@ -977,6 +977,13 @@
 
     window.addEventListener('resize', handleResize);
     updateCarousel();
+
+    // Auto-play for family carousel
+    if (carousel.getAttribute('data-autoplay') === 'true') {
+      setInterval(() => {
+        goToSlide(currentIndex + 1);
+      }, 3000);
+    }
   });
 </script>
 
